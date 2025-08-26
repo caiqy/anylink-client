@@ -6,7 +6,7 @@ on:
 jobs:
   setup:
     name: Setup
-    uses: tlslink/sslcon/.github/workflows/release-setup.yml@main
+    uses: caiqy/sslcon/.github/workflows/release-setup.yml@main
   build:
     name: Build
     runs-on: ${{ matrix.os }}
@@ -146,7 +146,7 @@ jobs:
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage out/opt/anylink/bin/anylink -extra-plugins=platformthemes/libqgtk3.so -no-copy-copyright-files -no-translations -unsupported-allow-new-glibc
           cp fcitx-qt5-master/qt6/platforminputcontext/libfcitxplatforminputcontextplugin-qt6.so out/opt/anylink/plugins/platforminputcontexts/
-          wget -c -nv https://github.com/tlslink/sslcon/releases/download/continuous/sslcon-linux-amd64.tar.gz
+          wget -c -nv https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-linux-amd64.tar.gz
           tar -zxvf sslcon-*.tar.gz
           cp vpnagent sslcon out/opt/anylink/bin
           7z a installer/packages/root/data/anylink.7z ./out/opt/anylink/*
@@ -162,7 +162,7 @@ jobs:
           chmod a+x linuxdeployqt-continuous-aarch64.AppImage
           ./linuxdeployqt-continuous-aarch64.AppImage out/opt/anylink/bin/anylink -extra-plugins=platformthemes/libqgtk3.so -no-copy-copyright-files -no-translations -unsupported-allow-new-glibc
           cp fcitx-qt5-master/qt6/platforminputcontext/libfcitxplatforminputcontextplugin-qt6.so out/opt/anylink/plugins/platforminputcontexts/
-          wget -c -nv https://github.com/tlslink/sslcon/releases/download/continuous/sslcon-linux-arm64.tar.gz
+          wget -c -nv https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-linux-arm64.tar.gz
           tar -zxvf sslcon-*.tar.gz
           cp vpnagent sslcon out/opt/anylink/bin
           7z a installer/packages/root/data/anylink.7z ./out/opt/anylink/*
@@ -174,7 +174,7 @@ jobs:
           tar -zcvf "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
         elif [ "${{ matrix.build }}" = "windows" ]; then
           windeployqt out/bin/anylink.exe --no-translations --no-system-d3d-compiler --no-opengl-sw --no-svg
-          curl -k -L -O https://github.com/tlslink/sslcon/releases/download/continuous/sslcon-windows10-amd64.7z
+          curl -k -L -O https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-windows10-amd64.7z
           7z x -y sslcon-*.7z
           cp vpnagent.exe sslcon.exe out/bin
           7z a installer/packages/root/data/anylink.7z ./out/bin/*
@@ -191,7 +191,7 @@ jobs:
           hdiutil attach ./QtInstallerFramework-macOS-x64-4.6.1.dmg
           /Volumes/QtInstallerFramework-macOS-x64-4.6.1/QtInstallerFramework-macOS-x64-4.6.1.app/Contents/MacOS/QtInstallerFramework-macOS-x64-4.6.1 --al --da -c -t `pwd`/ifw in
           cd ../out/bin
-          curl -k -L -O https://github.com/tlslink/sslcon/releases/download/continuous/sslcon-macOS-arm64.tar.gz
+          curl -k -L -O https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-macOS-arm64.tar.gz
           tar -zxvf sslcon-*.tar.gz
           cp vpnagent sslcon AnyLink.app/Contents/MacOS
           macdeployqt AnyLink.app
