@@ -12,6 +12,7 @@ public:
     explicit ConfigManager(QObject *parent = nullptr);
 
     QJsonObject config{{"lastProfile", ""},
+                       {"autoStart", false},
                        {"autoLogin", false},
                        {"minimize", true},
                        {"block", true},

@@ -101,8 +101,17 @@
     </message>
     <message>
         <location line="+21"/>
+        <source>Launch AnyLink on system startup</source>
+        <translation>开机时自动启动 AnyLink</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Connect to the last used VPN when AnyLink is started</source>
         <translation>启动应用后自动连接最近使用的 VPN</translation>
+    </message>
+    <message>
+        <source>Failed to configure autostart. Please check file permissions.</source>
+        <translation>设置开机自启动失败，请检查文件权限。</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -222,6 +231,34 @@
         <location line="+25"/>
         <source>Couldn&apos;t open config file</source>
         <translation>未能打开配置文件</translation>
+    </message>
+</context>
+<context>
+    <name>ReconnectDialog</name>
+    <message>
+        <location filename="../src/reconnectdialog.cpp" line="+30"/>
+        <source>Connection Error</source>
+        <translation>连接错误</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Connection interrupted</source>
+        <translation>连接已中断</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Will retry in %1 seconds...</source>
+        <translation>将在 %1 秒后重试...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cancel</source>
+        <translation>取消重试</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Retry Now</source>
+        <translation>立即重试</translation>
     </message>
 </context>
 <context>

@@ -548,6 +548,13 @@
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
+          <widget class="QCheckBox" name="checkBoxAutoStart">
+           <property name="text">
+            <string>Launch AnyLink on system startup</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="checkBoxAutoLogin">
            <property name="text">
             <string>Connect to the last used VPN when AnyLink is started</string>

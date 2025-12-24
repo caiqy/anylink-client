@@ -50,7 +50,8 @@ macx {
     QMAKE_TARGET_BUNDLE_PREFIX = pro.anylink
 
     HEADERS += src/macdockiconhandler.h
-    SOURCES += src/macdockiconhandler.mm
+    OBJECTIVE_SOURCES += src/macdockiconhandler.mm \
+        src/autostartmanager_mac.mm
 
     TARGET = AnyLink
     # QMAKE_APPLE_DEVICE_ARCHS = x86_64
@@ -86,6 +87,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs depr
 
 SOURCES += \
     src/anylink.cpp \
+    src/autostartmanager.cpp \
     src/common.cpp \
     src/configmanager.cpp \
     src/detaildialog.cpp \
@@ -99,6 +101,7 @@ SOURCES += \
 
 HEADERS += \
     src/anylink.h \
+    src/autostartmanager.h \
     src/common.h \
     src/configmanager.h \
     src/detaildialog.h \

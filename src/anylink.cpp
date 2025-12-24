@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QJsonValue>
 #include <QtWidgets>
+#include "autostartmanager.h"
 #include "configmanager.h"
 #include "detaildialog.h"
 #include "jsonrpcwebsocketclient.h"
@@ -185,6 +186,7 @@ void AnyLink::createTrayIcon()
 
 void AnyLink::initConfig()
 {
+    ui->checkBoxAutoStart->setChecked(AutoStartManager::isAutoStartEnabled());
     ui->checkBoxAutoLogin->setChecked(configManager->config["autoLogin"].toBool());
     ui->checkBoxMinimize->setChecked(configManager->config["minimize"].toBool());
     ui->checkBoxBlock->setChecked(configManager->config["block"].toBool());
@@ -193,6 +195,17 @@ void AnyLink::initConfig()
     ui->checkBoxCiscoCompat->setChecked(configManager->config["cisco_compat"].toBool());
     ui->checkBoxDtls->setChecked(configManager->config["no_dtls"].toBool());
 
+    connect(ui->checkBoxAutoStart, &QCheckBox::toggled, this, [this](bool checked) {
+        if (!AutoStartManager::setAutoStart(checked)) {
+            ui->checkBoxAutoStart->blockSignals(true);
+            ui->checkBoxAutoStart->setChecked(!checked);
+            ui->checkBoxAutoStart->blockSignals(false);
+            error(tr("Failed to configure autostart. Please check file permissions."), this);
+            return;
+        }
+        configManager->config["autoStart"] = checked;
+        saveConfig();
+    });
     connect(ui->checkBoxAutoLogin, &QCheckBox::toggled, this, [this](bool checked) {
         configManager->config["autoLogin"] = checked;
         saveConfig();
