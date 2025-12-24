@@ -36,7 +36,7 @@ jobs:
           os: windows-2019
           qt: 5.15.2
           arch: win64_msvc2019_64
-          qt-modules: 'qtwebsockets'
+          qt-modules: ''
           qt-tools: 'tools_qtcreator'
           installer-name: anylink-windows-amd64.exe
         - build: macos-arm64
