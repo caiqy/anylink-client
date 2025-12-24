@@ -175,7 +175,7 @@ jobs:
           tar -zcvf "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
         elif [ "${{ matrix.build }}" = "windows" ]; then
           windeployqt out/bin/anylink.exe --no-translations --no-system-d3d-compiler --no-opengl-sw --no-svg
-          curl -k -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-windows10-amd64.7z
+          curl -k -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-windows7-amd64.7z
           7z x -y sslcon-*.7z
           cp vpnagent.exe sslcon.exe out/bin
           7z a installer/packages/root/data/anylink.7z ./out/bin/*
