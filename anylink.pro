@@ -2,8 +2,14 @@ QT       += core gui websockets widgets
 
 CONFIG += c++14
 TRANSLATIONS = i18n/anylink_zh_CN.ts
-CONFIG += lrelease
 QM_FILES_OUTPUT_DIR = $$PWD/i18n
+
+translations.target = translations
+translations.commands = $$QMAKE_LRELEASE $$TRANSLATIONS -qm $$QM_FILES_OUTPUT_DIR/anylink_zh_CN.qm
+translations.depends = $$TRANSLATIONS
+QMAKE_EXTRA_TARGETS += translations
+first.depends += translations
+PRE_TARGETDEPS += translations
 
 win32|macx|linux:!android {
     include(3rdparty/SingleApplication/singleapplication.pri)

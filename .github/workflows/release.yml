@@ -116,6 +116,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
+        lrelease i18n/anylink_zh_CN.ts -qm i18n/anylink_zh_CN.qm
         if [[ "${{ matrix.build }}" == linux* ]]; then
           qmake
           make -j $(nproc)
