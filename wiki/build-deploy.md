@@ -6,7 +6,7 @@
 
 | 依赖 | 版本 | 说明 |
 |------|------|------|
-| Qt | 6.x | Core, GUI, Widgets, WebSockets 模块 |
+| Qt | 5.15.2 (Windows) / 6.x (Linux/macOS) | Core, GUI, Widgets, WebSockets 模块 |
 | C++ 编译器 | C++14 | MSVC/GCC/Clang |
 | qmake | Qt 自带 | 构建系统 |
 
@@ -31,7 +31,8 @@ git submodule update --init --recursive
 
 1. **安装 Qt**
    - 下载 Qt Online Installer
-   - 安装 Qt 6.x (MSVC 2019/2022 64-bit)
+   - 安装 Qt 5.15.2 (MSVC 2019 64-bit) 用于支持 Windows 7+
+   - 或安装 Qt 6.x (MSVC 2019/2022 64-bit) 用于 Windows 10+
    - 确保安装 Qt WebSockets 模块
 
 2. **使用 Qt Creator**
@@ -142,11 +143,11 @@ linux:!android {
 
 #### 构建矩阵
 
-| 平台 | 架构 | Qt 版本 |
-|------|------|---------|
-| Windows | x64 | 6.x |
-| macOS | x64, arm64 | 6.x |
-| Linux | amd64 | 6.x |
+| 平台 | 架构 | Qt 版本 | 系统要求 |
+|------|------|---------|----------|
+| Windows | x64 | 5.15.2 | Windows 7+ 64-bit |
+| macOS | x64, arm64 | 6.x | macOS 10.15+ |
+| Linux | amd64 | 6.x | Ubuntu 20.04+ |
 
 ### 构建产物
 
@@ -252,7 +253,7 @@ cp vpnagent sslcon AnyLink.app/Contents/MacOS
 | linux-latest | ubuntu-24.04 | 6.9.1 | linux_gcc_64 |
 | linux | ubuntu-22.04 | 6.9.1 | linux_gcc_64 |
 | linux-arm64 | ubuntu-24.04-arm | 6.9.1 | linux_gcc_arm64 |
-| windows | windows-2022 | 6.10.0 | win64_msvc2022_64 |
+| windows | windows-2019 | 5.15.2 | win64_msvc2019_64 |
 | macos-arm64 | macos-14 | 6.9.1 | clang_64 |
 
 ### 打包工具

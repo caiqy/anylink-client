@@ -20,6 +20,7 @@ public:
 
     QJsonObject config{
         {"lastProfile", ""},
+        {"autoStart", false},
         {"autoLogin", false},
         {"minimize", true},
         {"block", true},
@@ -40,6 +41,7 @@ public:
 | 配置项 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
 | `lastProfile` | string | `""` | 上次使用的配置文件名称 |
+| `autoStart` | bool | `false` | 开机时自动启动 AnyLink |
 | `autoLogin` | bool | `false` | 启动时自动连接 VPN |
 | `minimize` | bool | `true` | 连接成功后最小化到托盘 |
 | `block` | bool | `true` | 启用服务器证书验证 |
@@ -223,6 +225,41 @@ ConfigManager *configManager = nullptr;
 
 // main.cpp
 configManager = new ConfigManager();
+```
+
+## 开机自启动功能
+
+### AutoStartManager
+
+`AutoStartManager` 类负责跨平台的开机自启动管理：
+
+```cpp
+// 头文件: src/autostartmanager.h
+// 源文件: src/autostartmanager.cpp
+
+class AutoStartManager {
+public:
+    static bool setAutoStart(bool enable);
+    static bool isAutoStartEnabled();
+};
+```
+
+### 平台实现
+
+| 平台 | 实现方式 | 权限要求 |
+|------|----------|----------|
+| Windows | 注册表 `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run` | 用户级别 |
+| macOS | `~/Library/LaunchAgents/` plist 文件 | 用户级别 |
+| Linux | `~/.config/autostart/` desktop 文件 | 用户级别 |
+
+### 使用示例
+
+```cpp
+// 设置开机自启动
+AutoStartManager::setAutoStart(true);
+
+// 检查状态
+bool enabled = AutoStartManager::isAutoStartEnabled();
 ```
 
 ## 与其他模块的交互

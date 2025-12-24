@@ -2,7 +2,123 @@
 
 ## 概述
 
-本模块包含项目中自定义的 UI 组件，包括加载动画、详情对话框和文本浏览器。
+本模块包含项目中自定义的 UI 组件，包括加载动画、详情对话框、重连对话框和文本浏览器。
+
+---
+
+## ReconnectDialog 重连对话框
+
+### 文件位置
+
+- 头文件: `src/reconnectdialog.h`
+- 源文件: `src/reconnectdialog.cpp`
+
+### 功能说明
+
+`ReconnectDialog` 是一个带倒计时的重连对话框，在 VPN 连接失败或异常断开时显示，提供用户友好的错误提示和重连控制。
+
+### 主要特性
+
+1. **错误信息显示**
+   - 清晰展示连接失败原因
+   - 支持多语言显示
+
+2. **倒计时功能**
+   - 5 秒自动倒计时
+   - 实时更新剩余时间
+   - 倒计时结束自动重连
+
+3. **用户控制**
+   - 取消按钮：中止重连
+   - 立即重试：跳过倒计时
+
+4. **两种重连模式**
+   - 完整重连：需要重新认证
+   - 快速重连：复用已有 session
+
+### 类定义
+
+```cpp
+class ReconnectDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit ReconnectDialog(QWidget *parent = nullptr);
+    void setMessage(const QString &message, bool quickReconnect);
+
+private slots:
+    void onCancelClicked();
+    void onRetryClicked();
+
+private:
+    QLabel *m_errorLabel;
+    QLabel *m_countdownLabel;
+    QPushButton *m_cancelButton;
+    QPushButton *m_retryButton;
+    QTimer *m_timer;
+    int m_remainingSeconds;
+    bool m_quickReconnect;
+};
+```
+
+### 使用场景
+
+#### 1. 首次连接失败
+```cpp
+// anylink.cpp
+void AnyLink::onConnectError(const QString &errorMessage)
+{
+    showReconnectDialog(errorMessage, false);  // false = 完整重连
+}
+```
+
+#### 2. VPN 异常断开 (ABORT)
+```cpp
+// anylink.cpp
+void AnyLink::onVpnAbort(const QString &errorMessage)
+{
+    showReconnectDialog(errorMessage, true);   // true = 快速重连
+}
+```
+
+### UI 布局
+
+```
+┌─────────────────────────────────┐
+│                                 │
+│        错误信息提示              │
+│                                 │
+│      倒计时: 5 秒后重连         │
+│                                 │
+│    [取消]    [立即重试]         │
+│                                 │
+└─────────────────────────────────┘
+```
+
+### 国际化支持
+
+对话框文本通过 Qt 的 `tr()` 函数支持多语言：
+
+```cpp
+// 中文翻译 (anylink_zh_CN.ts)
+<message>
+    <source>Connection interrupted</source>
+    <translation>连接已中断</translation>
+</message>
+<message>
+    <source>Cancel</source>
+    <translation>取消</translation>
+</message>
+<message>
+    <source>Retry Now</source>
+    <translation>立即重试</translation>
+</message>
+<message>
+    <source>Retrying in %1 seconds...</source>
+    <translation>%1 秒后重试...</translation>
+</message>
+```
 
 ---
 
@@ -294,17 +410,29 @@ trayIconMenu->setAsDockMenu();
 ### 样式内容
 
 ```css
-/* TabBar 样式 */
+/* TabBar 样式 - 修复 Qt 5.15 字体度量问题 */
 QTabBar::tab {
     height: 25px;
+    min-width: 45px;  /* 确保标签宽度足够显示中文 */
     color: rgb(79, 79, 79);
     background: transparent;
     font: 14px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+QTabBar::tab:hover {
+    font: 15px;
+    border-bottom: 2px solid rgb(155, 155, 155);
+    color: black;
+    height: 25px;
 }
 
 QTabBar::tab:selected {
+    font: 15px;
     border-bottom: 2px solid rgb(45, 105, 65);
     color: black;
+    height: 25px;
 }
 
 /* ListView 样式 */
