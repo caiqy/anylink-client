@@ -94,6 +94,7 @@ SOURCES += \
     src/loading.cpp \
     src/main.cpp \
     src/profilemanager.cpp \
+    src/reconnectdialog.cpp \
     src/textbrowser.cpp
 
 HEADERS += \
@@ -105,6 +106,7 @@ HEADERS += \
     src/keychainclass.h \
     src/loading.h \
     src/profilemanager.h \
+    src/reconnectdialog.h \
     src/textbrowser.h
 
 FORMS += \

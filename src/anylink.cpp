@@ -7,6 +7,7 @@
 #include "detaildialog.h"
 #include "jsonrpcwebsocketclient.h"
 #include "profilemanager.h"
+#include "reconnectdialog.h"
 #include "textbrowser.h"
 #include "ui_anylink.h"
 
@@ -323,8 +324,7 @@ void AnyLink::afterShowOneTime()
         ui->statusBar->setText(result.toString());
         emit vpnClosed();
         if (!activeDisconnect) {
-            // 快速重连，不需要再次进行用户认证
-            QTimer::singleShot(1500, this, [this]() { connectVPN(true); });
+            showReconnectDialog(result.toString(), true);
         }
     });
     rpc->connectToServer(QUrl("ws://127.0.0.1:6210/rpc"));
@@ -351,6 +351,33 @@ void AnyLink::resetVPNStatus()
 void AnyLink::saveConfig()
 {
     configManager->saveConfig();
+}
+
+void AnyLink::showReconnectDialog(const QString &errorMessage, bool quickReconnect)
+{
+    if (reconnectDialog) {
+        reconnectDialog->close();
+        reconnectDialog->deleteLater();
+        reconnectDialog = nullptr;
+    }
+
+    if (isHidden()) {
+        show();
+    }
+
+    reconnectDialog = new ReconnectDialog(errorMessage, quickReconnect, 5, this);
+
+    connect(reconnectDialog, &ReconnectDialog::retryRequested, this, [this](bool quick) {
+        reconnectDialog = nullptr;
+        connectVPN(quick);
+    });
+
+    connect(reconnectDialog, &ReconnectDialog::cancelRequested, this, [this]() {
+        reconnectDialog = nullptr;
+        trayIcon->setIcon(iconNotConnected);
+    });
+
+    reconnectDialog->show();
 }
 
 /**
@@ -401,16 +428,13 @@ void AnyLink::connectVPN(bool reconnect)
         rpc->callAsync(method, id, currentProfile, [this, reconnect](const QJsonValue &result) {
             ui->progressBar->stop();
             if(result.isObject()) {  // error object
-                // dialog
-                //                ui->statusBar->setText(result.toObject().value("message").toString());
+                QString errorMessage = result.toObject().value("message").toString();
+                ui->statusBar->setText(errorMessage);
                 if (reconnect) {
                     // 当快速重连失败，再次尝试完全重新连接，用于服务端可能已经移除session的情况
-                    QTimer::singleShot(3000, this, [this]() { connectVPN(); });
+                    showReconnectDialog(errorMessage, false);
                 } else {
-                    if (isHidden()) {
-                        show();
-                    }
-                    error(result.toObject().value("message").toString(), this);
+                    showReconnectDialog(errorMessage, false);
                 }
             } else {
                 ui->statusBar->setText(result.toString());

@@ -15,6 +15,7 @@ QT_END_NAMESPACE
 class JsonRpcWebSocketClient;
 class ProfileManager;
 class DetailDialog;
+class ReconnectDialog;
 class QSystemTrayIcon;
 class QMenu;
 class QComboBox;
@@ -56,9 +57,11 @@ private:
     bool m_vpnConnected;
     bool activeDisconnect = false;
     DetailDialog *detailDialog = nullptr;
+    ReconnectDialog *reconnectDialog = nullptr;
     QJsonObject currentProfile = {};
 
     void center();
+    void showReconnectDialog(const QString &errorMessage, bool quickReconnect);
     void loadStyleSheet(const QString &styleSheetFile);
 
     void createTrayActions();
