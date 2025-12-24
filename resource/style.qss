@@ -1,6 +1,7 @@
 /********** QTabBar **********/
 QTabBar::tab {
        height: 25px;
+       min-width: 45px;
        color: rgb(79, 79, 79);
        background: transparent;font: 14px;margin-right: 10px;margin-left: 10px;
 }
