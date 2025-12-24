@@ -2,6 +2,8 @@ QT       += core gui websockets widgets
 
 CONFIG += c++14
 TRANSLATIONS = i18n/anylink_zh_CN.ts
+CONFIG += lrelease
+QM_FILES_OUTPUT_DIR = $$PWD/i18n
 
 win32|macx|linux:!android {
     include(3rdparty/SingleApplication/singleapplication.pri)
