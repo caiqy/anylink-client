@@ -31,7 +31,8 @@ git submodule update --init --recursive
 
 1. **安装 Qt**
    - 下载 Qt Online Installer
-   - 安装 Qt 5.15.2 (MSVC 2019 64-bit) 用于支持 Windows 7+
+   - 安装 Qt 5.15.2 (MSVC 2019 64-bit) 用于支持 Windows 7+ 64-bit
+   - 安装 Qt 5.15.2 (MSVC 2019 32-bit) 用于支持 Windows 7+ 32-bit
    - 或安装 Qt 6.x (MSVC 2019/2022 64-bit) 用于 Windows 10+
    - 确保安装 Qt WebSockets 模块
 
@@ -146,6 +147,7 @@ linux:!android {
 | 平台 | 架构 | Qt 版本 | 系统要求 |
 |------|------|---------|----------|
 | Windows | x64 | 5.15.2 | Windows 7+ 64-bit |
+| Windows | x86 | 5.15.2 | Windows 7+ 32-bit |
 | macOS | x64, arm64 | 6.x | macOS 10.15+ |
 | Linux | amd64 | 6.x | Ubuntu 20.04+ |
 
@@ -153,7 +155,8 @@ linux:!android {
 
 | 平台 | 产物 | 说明 |
 |------|------|------|
-| Windows | `anylink-windows-amd64.exe` | NSIS 安装程序 |
+| Windows (x64) | `anylink-windows-amd64.exe` | IFW 安装程序（64位） |
+| Windows (x86) | `anylink-windows-386.exe` | IFW 安装程序（32位） |
 | macOS (x64) | `anylink-macos-amd64.dmg` | DMG 镜像 |
 | macOS (arm64) | `anylink-macos-arm64.dmg` | DMG 镜像 |
 | Linux | `anylink-linux-amd64.tar.gz` | 压缩包 + .run 安装脚本 |
@@ -220,6 +223,7 @@ tar -czvf anylink-linux-amd64.tar.gz opt/
 |------|------|------|------|
 | SingleApplication | `3rdparty/SingleApplication` | https://github.com/itay-grudev/SingleApplication.git | master |
 | qtkeychain | `3rdparty/qtkeychain` | https://github.com/frankosterfeld/qtkeychain.git | main |
+| sslcon | `3rdparty/sslcon` | https://github.com/caiqy/sslcon.git | win7-32bit |
 
 ### VPN 核心组件 (sslcon)
 
@@ -232,15 +236,23 @@ tar -czvf anylink-linux-amd64.tar.gz opt/
 
 ```bash
 # Linux
-wget https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-linux-amd64.tar.gz
+wget https://github.com/caiqy/sslcon/releases/download/latest/sslcon-linux-amd64.tar.gz
+tar -zxvf sslcon-linux-amd64.tar.gz
 cp vpnagent sslcon out/opt/anylink/bin
 
-# Windows
-curl -L -O https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-windows10-amd64.7z
+# Windows (64-bit / Win7+)
+curl -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-windows7-amd64.7z
+7z x -y sslcon-windows7-amd64.7z
+cp vpnagent.exe sslcon.exe out/bin
+
+# Windows (32-bit / Win7+)
+curl -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-windows7-386.7z
+7z x -y sslcon-windows7-386.7z
 cp vpnagent.exe sslcon.exe out/bin
 
 # macOS
-curl -L -O https://github.com/caiqy/sslcon/releases/download/continuous/sslcon-macOS-arm64.tar.gz
+curl -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-macOS-arm64.tar.gz
+tar -zxvf sslcon-macOS-arm64.tar.gz
 cp vpnagent sslcon AnyLink.app/Contents/MacOS
 ```
 
@@ -254,6 +266,7 @@ cp vpnagent sslcon AnyLink.app/Contents/MacOS
 | linux | ubuntu-22.04 | 6.9.1 | linux_gcc_64 |
 | linux-arm64 | ubuntu-24.04-arm | 6.9.1 | linux_gcc_arm64 |
 | windows | windows-2019 | 5.15.2 | win64_msvc2019_64 |
+| windows-x86 | windows-2019 | 5.15.2 | win32_msvc2019 |
 | macos-arm64 | macos-14 | 6.9.1 | clang_64 |
 
 ### 打包工具
