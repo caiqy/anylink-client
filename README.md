@@ -24,7 +24,7 @@ Currently the following servers are supported,
 
 ### Windows
 
-Please use Windows 7 64-bit or newer.
+Please use Windows 7 (32-bit or 64-bit) or newer.
 
 ### macOS
 
