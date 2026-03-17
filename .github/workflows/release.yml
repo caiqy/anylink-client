@@ -33,14 +33,14 @@ jobs:
           qt-modules: 'qtwebsockets'
           installer-name: anylink-linux-arm64.run
         - build: windows
-          os: windows-2019
+          os: windows-2022
           qt: 5.15.2
           arch: win64_msvc2019_64
           qt-modules: ''
           qt-tools: 'tools_qtcreator'
           installer-name: anylink-windows-amd64.exe
         - build: windows-x86
-          os: windows-2019
+          os: windows-2022
           qt: 5.15.2
           arch: win32_msvc2019
           qt-modules: ''
