@@ -108,6 +108,12 @@ jobs:
     - if: matrix.build == 'windows'
       name: Setup msvc
       uses: ilammy/msvc-dev-cmd@v1
+
+    - if: matrix.build == 'windows-x86'
+      name: Setup msvc (x86)
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x86
     - name: Install Qt
       # https://github.com/jurplel/install-qt-action
       uses: jurplel/install-qt-action@v4
@@ -137,7 +143,7 @@ jobs:
           cmake -DENABLE_QT5=Off -DENABLE_QT6=On .
           make -j $(nproc)
           cd ..
-        elif [[ "${{ matrix.build }}" == "windows" ]]; then
+        elif [[ "${{ matrix.build }}" == "windows" || "${{ matrix.build }}" == "windows-x86" ]]; then
           rm "C:\Program Files\Git\usr\bin\link.exe"
           qmake
           "${IQTA_TOOLS}/QtCreator/bin/jom/jom.exe" -j $(nproc) -f Makefile.Release
