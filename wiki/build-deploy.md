@@ -175,7 +175,7 @@ installer/
 
 ### Windows 安装程序
 
-使用 Qt Installer Framework 或 NSIS：
+使用 Qt Installer Framework (IFW)：
 
 ```bash
 # Qt IFW
