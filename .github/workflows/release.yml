@@ -203,6 +203,20 @@ jobs:
           # https://bugreports.qt.io/browse/QTIFW-2295
           editbin /subsystem:windows ${{ matrix.installer-name }}
           7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
+        elif [ "${{ matrix.build }}" = "windows-x86" ]; then
+          windeployqt out/bin/anylink.exe --no-translations --no-system-d3d-compiler --no-opengl-sw --no-svg
+          curl -k -L -O https://github.com/caiqy/sslcon/releases/download/latest/sslcon-windows7-386.7z
+          7z x -y sslcon-*.7z
+          cp vpnagent.exe sslcon.exe out/bin
+          7z a installer/packages/root/data/anylink.7z ./out/bin/*
+          cd installer
+          curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.5.2/QtInstallerFramework-windows-x64-4.5.2.exe
+          ./QtInstallerFramework-windows-x64-4.5.2.exe --al --da -c -t `pwd`/ifw in
+          curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
+          cp vc_redist.x86.exe packages/root/data/
+          ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}
+          editbin /subsystem:windows ${{ matrix.installer-name }}
+          7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
         elif [ "${{ matrix.build }}" = "macos-arm64" ]; then
           cd installer
           curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.6.1/QtInstallerFramework-macOS-x64-4.6.1.dmg
