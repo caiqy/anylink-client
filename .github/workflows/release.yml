@@ -211,6 +211,9 @@ jobs:
           7z x -y sslcon-*.7z
           cp vpnagent.exe sslcon.exe out/bin
           7z a installer/packages/root/data/anylink.7z ./out/bin/*
+          # Use the x86-specific component.js so the installer always installs
+          # vc_redist.x86.exe regardless of the CPU architecture of the host machine.
+          cp installer/packages/root/meta/component-x86.js installer/packages/root/meta/component.js
           cd installer
           curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.5.2/QtInstallerFramework-windows-x64-4.5.2.exe
           ./QtInstallerFramework-windows-x64-4.5.2.exe --al --da -c -t `pwd`/ifw in
