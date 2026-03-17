@@ -6,3 +6,7 @@
 	path = 3rdparty/qtkeychain
 	url = https://github.com/frankosterfeld/qtkeychain.git
 	branch = main
+[submodule "3rdparty/sslcon"]
+	path = 3rdparty/sslcon
+	url = https://github.com/caiqy/sslcon.git
+	branch = win7-32bit
