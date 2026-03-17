@@ -67,6 +67,8 @@ Component.prototype.createOperations = function()
         // https://doc.qt.io/qtinstallerframework/scripting-systeminfo.html#buildCpuArchitecture-prop
         if (systemInfo.currentCpuArchitecture === "x86_64") {
             component.addElevatedOperation("Execute", "{0,3010,1638,5100}", "@TargetDir@/vc_redist.x64.exe", "/norestart", "/q");
+        } else if (systemInfo.currentCpuArchitecture === "i386") {
+            component.addElevatedOperation("Execute", "{0,3010,1638,5100}", "@TargetDir@/vc_redist.x86.exe", "/norestart", "/q");
         } else {
             component.addElevatedOperation("Execute", "{0,3010,1638,5100}", "@TargetDir@/vc_redist.arm64.exe", "/norestart", "/q"); 
         }
