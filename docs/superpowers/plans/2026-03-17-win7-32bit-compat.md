@@ -169,17 +169,19 @@
             cp vpnagent.exe sslcon.exe out/bin
             7z a installer/packages/root/data/anylink.7z ./out/bin/*
             cd installer
-            curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.5.2/QtInstallerFramework-windows-x64-4.5.2.exe
-            ./QtInstallerFramework-windows-x64-4.5.2.exe --al --da -c -t `pwd`/ifw in
+            curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
+            ./QtInstallerFramework-windows-x86-4.1.1.exe --al --da -c -t `pwd`/ifw in
             curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
             cp vc_redist.x86.exe packages/root/data/
             ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}
             editbin /subsystem:windows ${{ matrix.installer-name }}
+            python -c "import pathlib, struct, sys; installer = pathlib.Path('${{ matrix.installer-name }}'); data = installer.read_bytes(); pe_offset = struct.unpack_from('<I', data, 0x3c)[0]; signature = data[pe_offset:pe_offset + 4]; machine = struct.unpack_from('<H', data, pe_offset + 4)[0]; print(f'{installer} PE signature={signature!r}, machine=0x{machine:04x}'); sys.exit(0 if signature == b'PE\0\0' and machine == 0x14c else 1)"
             7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
   ```
 
   > 说明：
-  > - IFW 工具使用 x64 版本（构建侧工具，不需要与目标架构匹配）
+  > - IFW 4.5.2 不提供官方 x86 预编译包；`windows-x86` 使用 IFW 4.1.1 x86 生成 32 位安装器
+  > - PE 头校验要求安装器 `Machine` 为 `0x14c`，避免再次发布 64 位外层安装器
   > - `vc_redist.x86.exe` 从微软官方 aka.ms 短链下载后复制到安装包数据目录，供 `component.js` 引用
   > - `editbin /subsystem:windows` 修复安装器子系统标志，与 amd64 处理一致
 

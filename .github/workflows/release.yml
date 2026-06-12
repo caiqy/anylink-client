@@ -215,12 +215,13 @@ jobs:
           # vc_redist.x86.exe regardless of the CPU architecture of the host machine.
           cp installer/packages/root/meta/component-x86.js installer/packages/root/meta/component.js
           cd installer
-          curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.5.2/QtInstallerFramework-windows-x64-4.5.2.exe
-          ./QtInstallerFramework-windows-x64-4.5.2.exe --al --da -c -t `pwd`/ifw in
+          curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
+          ./QtInstallerFramework-windows-x86-4.1.1.exe --al --da -c -t `pwd`/ifw in
           curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
           cp vc_redist.x86.exe packages/root/data/
           ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}
           editbin /subsystem:windows ${{ matrix.installer-name }}
+          python -c "import pathlib, struct, sys; installer = pathlib.Path('${{ matrix.installer-name }}'); data = installer.read_bytes(); pe_offset = struct.unpack_from('<I', data, 0x3c)[0]; signature = data[pe_offset:pe_offset + 4]; machine = struct.unpack_from('<H', data, pe_offset + 4)[0]; print(f'{installer} PE signature={signature!r}, machine=0x{machine:04x}'); sys.exit(0 if signature == b'PE\0\0' and machine == 0x14c else 1)"
           7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
         elif [ "${{ matrix.build }}" = "macos-arm64" ]; then
           cd installer
