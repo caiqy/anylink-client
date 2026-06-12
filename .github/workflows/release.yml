@@ -215,8 +215,8 @@ jobs:
           # vc_redist.x86.exe regardless of the CPU architecture of the host machine.
           cp installer/packages/root/meta/component-x86.js installer/packages/root/meta/component.js
           cd installer
-          curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
-          ./QtInstallerFramework-windows-x86-4.1.1.exe --al --da -c -t `pwd`/ifw in
+          curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.3.0/QtInstallerFramework-windows-x86-4.3.0.exe
+          ./QtInstallerFramework-windows-x86-4.3.0.exe --al --da -c -t `pwd`/ifw in
           curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
           cp vc_redist.x86.exe packages/root/data/
           ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}

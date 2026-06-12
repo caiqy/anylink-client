@@ -101,8 +101,8 @@ elif [ "${{ matrix.build }}" = "windows-x86" ]; then
   cp vpnagent.exe sslcon.exe out/bin
   7z a installer/packages/root/data/anylink.7z ./out/bin/*
   cd installer
-  curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
-  ./QtInstallerFramework-windows-x86-4.1.1.exe --al --da -c -t `pwd`/ifw in
+  curl -k -O -L https://mirrors.ustc.edu.cn/qtproject/archive/qt-installer-framework/4.3.0/QtInstallerFramework-windows-x86-4.3.0.exe
+  ./QtInstallerFramework-windows-x86-4.3.0.exe --al --da -c -t `pwd`/ifw in
   # 下载 x86 VC++ redist 并放入安装包目录
   curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
   cp vc_redist.x86.exe packages/root/data/
@@ -112,7 +112,7 @@ elif [ "${{ matrix.build }}" = "windows-x86" ]; then
   7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
 ```
 
-> **注意**：`windows-x86` 必须使用 x86 版 IFW 生成安装器。IFW 4.5.2 没有官方 x86 预编译包，因此使用 IFW 4.1.1 x86，并通过 PE 头校验确认安装器 `Machine` 为 `0x14c`。
+> **注意**：`windows-x86` 必须使用 x86 版 IFW 生成安装器。IFW 4.5.2 没有官方 x86 预编译包，因此使用最新可用的 IFW 4.3.0 x86，并通过 PE 头校验确认安装器 `Machine` 为 `0x14c`。
 
 #### 1.5 msvc-dev-cmd 环境
 
