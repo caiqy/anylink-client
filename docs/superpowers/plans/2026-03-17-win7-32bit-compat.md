@@ -173,7 +173,8 @@
             ./QtInstallerFramework-windows-x86-4.3.0.exe --al --da -c -t `pwd`/ifw in
             curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
             cp vc_redist.x86.exe packages/root/data/
-            ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}
+            sed '/<PersistentLocalCache>/d' config/config.xml > config/config-x86.xml
+            ./ifw/bin/binarycreator --offline-only -c config/config-x86.xml -p packages ${{ matrix.installer-name }}
             editbin /subsystem:windows ${{ matrix.installer-name }}
             python -c "import pathlib, struct, sys; installer = pathlib.Path('${{ matrix.installer-name }}'); data = installer.read_bytes(); pe_offset = struct.unpack_from('<I', data, 0x3c)[0]; signature = data[pe_offset:pe_offset + 4]; machine = struct.unpack_from('<H', data, pe_offset + 4)[0]; print(f'{installer} PE signature={signature!r}, machine=0x{machine:04x}'); sys.exit(0 if signature == b'PE\0\0' and machine == 0x14c else 1)"
             7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
@@ -181,6 +182,7 @@
 
   > 说明：
   > - IFW 4.5.2 不提供官方 x86 预编译包；`windows-x86` 使用最新可用的 IFW 4.3.0 x86 生成 32 位安装器
+  > - IFW 4.3.0 x86 不支持 `PersistentLocalCache`，因此 x86 分支使用临时生成的 `config/config-x86.xml`
   > - PE 头校验要求安装器 `Machine` 为 `0x14c`，避免再次发布 64 位外层安装器
   > - `vc_redist.x86.exe` 从微软官方 aka.ms 短链下载后复制到安装包数据目录，供 `component.js` 引用
   > - `editbin /subsystem:windows` 修复安装器子系统标志，与 amd64 处理一致

@@ -106,13 +106,14 @@ elif [ "${{ matrix.build }}" = "windows-x86" ]; then
   # 下载 x86 VC++ redist 并放入安装包目录
   curl -k -O -L https://aka.ms/vs/17/release/vc_redist.x86.exe
   cp vc_redist.x86.exe packages/root/data/
-  ./ifw/bin/binarycreator --offline-only -c config/config.xml -p packages ${{ matrix.installer-name }}
+  sed '/<PersistentLocalCache>/d' config/config.xml > config/config-x86.xml
+  ./ifw/bin/binarycreator --offline-only -c config/config-x86.xml -p packages ${{ matrix.installer-name }}
   editbin /subsystem:windows ${{ matrix.installer-name }}
   python -c "import pathlib, struct, sys; installer = pathlib.Path('${{ matrix.installer-name }}'); data = installer.read_bytes(); pe_offset = struct.unpack_from('<I', data, 0x3c)[0]; signature = data[pe_offset:pe_offset + 4]; machine = struct.unpack_from('<H', data, pe_offset + 4)[0]; print(f'{installer} PE signature={signature!r}, machine=0x{machine:04x}'); sys.exit(0 if signature == b'PE\0\0' and machine == 0x14c else 1)"
   7z a -tzip -r "${{ github.workspace }}"/archive/${{ env.ARCHIVE_NAME }} ${{ matrix.installer-name }}
 ```
 
-> **注意**：`windows-x86` 必须使用 x86 版 IFW 生成安装器。IFW 4.5.2 没有官方 x86 预编译包，因此使用最新可用的 IFW 4.3.0 x86，并通过 PE 头校验确认安装器 `Machine` 为 `0x14c`。
+> **注意**：`windows-x86` 必须使用 x86 版 IFW 生成安装器。IFW 4.5.2 没有官方 x86 预编译包，因此使用最新可用的 IFW 4.3.0 x86。IFW 4.3.0 x86 不支持 `PersistentLocalCache`，因此 x86 分支使用临时生成的 `config/config-x86.xml`，并通过 PE 头校验确认安装器 `Machine` 为 `0x14c`。
 
 #### 1.5 msvc-dev-cmd 环境
 
